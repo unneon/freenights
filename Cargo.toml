@@ -1,0 +1,12 @@
+[package]
+name = "freenights"
+version = "0.1.0"
+authors = ["Mateusz Cegiełka <mateusz@cegla.net>"]
+edition = "2018"
+
+[dependencies]
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = 'abort'
