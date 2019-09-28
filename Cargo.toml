@@ -5,6 +5,8 @@ authors = ["Mateusz Cegiełka <mateusz@cegla.net>"]
 edition = "2018"
 
 [dependencies]
+amethyst = { version = "0.13", features = ["vulkan"] }
+toml = "0.5"
 
 [profile.release]
 lto = true
