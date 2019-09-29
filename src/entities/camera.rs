@@ -1,7 +1,7 @@
 use amethyst::{core::Transform, prelude::*, renderer::Camera};
 
-pub const ARENA_WIDTH: f32 = 100.0;
-pub const ARENA_HEIGHT: f32 = 100.0;
+pub const ARENA_WIDTH: f32 = 40.0;
+pub const ARENA_HEIGHT: f32 = 40.0;
 
 pub fn initialize(world: &mut World) {
 	let mut transform = Transform::default();

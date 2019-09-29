@@ -1,3 +1,4 @@
+mod balance;
 mod configs;
 mod entities;
 mod graphics;
@@ -21,7 +22,8 @@ fn main() -> amethyst::Result<()> {
 		)?
 		.with_bundle(TransformBundle::new())?
 		.with(systems::Movement, "movement", &["input_system"]);
-	let mut game = Application::build(root_dir.join("assets"), Game::default())?.build(game_data)?;
+	let mut game =
+		Application::build(root_dir.join("assets"), Game::default())?.with_resource(balance::Balance::load(&root_dir)?).build(game_data)?;
 	game.run();
 	Ok(())
 }
