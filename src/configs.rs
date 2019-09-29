@@ -1,5 +1,5 @@
 use amethyst::{
-	assets::{Format, Handle}, renderer::{sprite::SpriteList, SpriteSheet, Texture}, window::DisplayConfig
+	assets::{Format, Handle}, input::{Bindings, StringBindings}, renderer::{sprite::SpriteList, SpriteSheet, Texture}, window::DisplayConfig
 };
 use std::path::Path;
 
@@ -22,4 +22,8 @@ impl Format<SpriteSheet> for SpriteSheetTOML {
 		let sprite_list: SpriteList = toml::from_slice(&bytes)?;
 		Ok(SpriteSheet { texture: self.0.clone(), sprites: sprite_list.build_sprites() })
 	}
+}
+
+pub fn bindings(root_dir: &Path) -> amethyst::Result<Bindings<StringBindings>> {
+	Ok(toml::from_slice(&std::fs::read(root_dir.join("config").join("input.toml"))?)?)
 }
