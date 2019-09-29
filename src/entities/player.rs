@@ -9,5 +9,5 @@ impl Component for Player {
 }
 
 pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
-	world.create_entity().with(Player {}).with(Transform::default()).with(SpriteRender { sprite_sheet, sprite_number: 1 }).build();
+	world.create_entity().with(Player {}).with(Transform::default()).with(SpriteRender { sprite_sheet, sprite_number: 0 }).build();
 }
