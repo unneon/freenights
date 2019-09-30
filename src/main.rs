@@ -22,7 +22,8 @@ fn main() -> amethyst::Result<()> {
 				.with_plugin(RenderFlat2D::default()),
 		)?
 		.with_bundle(TransformBundle::new())?
-		.with(systems::Movement, "movement", &["input_system"]);
+		.with(systems::Movement, "movement", &["input_system"])
+		.with(systems::Animation, "animation", &["movement"]);
 	let mut game =
 		Application::build(root_dir.join("assets"), Game::default())?.with_resource(balance::Balance::load(&root_dir)?).build(game_data)?;
 	game.run();

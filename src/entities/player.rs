@@ -5,6 +5,12 @@ use amethyst::{
 
 pub struct Player {
 	pub velocity: Vector2<f32>,
+	pub facing: Facing,
+}
+
+pub enum Facing {
+	Left,
+	Right,
 }
 
 impl Player {
@@ -20,8 +26,8 @@ impl Component for Player {
 pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 	world
 		.create_entity()
-		.with(Player { velocity: Vector2::new(0., 0.) })
+		.with(Player { velocity: Vector2::new(0., 0.), facing: Facing::Right })
 		.with(Transform::default())
-		.with(SpriteRender { sprite_sheet, sprite_number: 0 })
+		.with(SpriteRender { sprite_sheet, sprite_number: 1 })
 		.build();
 }

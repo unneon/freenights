@@ -1,10 +1,16 @@
 # https://assetstore.unity.com/packages/2d/environments/free-platform-game-assets-85838
 
-texture_width = 2
+texture_width = 4
 texture_height = 2
 
 [[sprites]]
 x = 0
+y = 0
+width = 2
+height = 2
+
+[[sprites]]
+x = 2
 y = 0
 width = 2
 height = 2
