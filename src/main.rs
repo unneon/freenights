@@ -4,6 +4,7 @@ mod entities;
 mod graphics;
 mod state;
 mod systems;
+mod util;
 
 use crate::state::Game;
 use amethyst::{

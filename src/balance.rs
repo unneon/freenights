@@ -14,5 +14,6 @@ impl Balance {
 
 #[derive(Deserialize)]
 pub struct Player {
-	pub max_speed: f32,
+	pub acceleration: f32,
+	pub drag: f32,
 }

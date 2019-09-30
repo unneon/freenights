@@ -1,6 +1,6 @@
-use crate::{balance::Balance, entities::player::Player};
+use crate::{balance::Balance, entities::player::Player, util::scale_axes};
 use amethyst::{
-	core::{math::Vector2, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Join, Read, ReadExpect, ReadStorage, System, SystemData, World, WriteStorage}, input::{InputHandler, StringBindings}
+	core::{SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Join, Read, ReadExpect, System, SystemData, World, WriteStorage}, input::{InputHandler, StringBindings}
 };
 
 #[derive(SystemDesc)]
@@ -8,16 +8,15 @@ pub struct Movement;
 
 impl<'s> System<'s> for Movement {
 	type SystemData =
-		(WriteStorage<'s, Transform>, ReadStorage<'s, Player>, Read<'s, InputHandler<StringBindings>>, Read<'s, Time>, ReadExpect<'s, Balance>);
+		(WriteStorage<'s, Transform>, WriteStorage<'s, Player>, Read<'s, InputHandler<StringBindings>>, Read<'s, Time>, ReadExpect<'s, Balance>);
 
-	fn run(&mut self, (mut transforms, players, input, time, balance): Self::SystemData) {
-		for (_player, transform) in (&players, &mut transforms).join() {
-			let axis = Vector2::new(input.axis_value("move_horizontal").unwrap(), input.axis_value("move_vertical").unwrap());
-			if let Some(axis) = axis.try_normalize(0.) {
-				let delta = axis * time.delta_seconds() * balance.player.max_speed;
-				transform.prepend_translation_x(delta[0]);
-				transform.prepend_translation_y(delta[1]);
-			}
+	fn run(&mut self, (mut transforms, mut players, input, time, balance): Self::SystemData) {
+		for (player, transform) in (&mut players, &mut transforms).join() {
+			let axes = scale_axes(input.axis_value("move_horizontal").unwrap(), input.axis_value("move_vertical").unwrap());
+			player.velocity += player.compute_acceleration(axes, &balance) * time.delta_seconds();
+			let displacement = player.velocity * time.delta_seconds();
+			transform.prepend_translation_x(displacement[0]);
+			transform.prepend_translation_y(displacement[1]);
 		}
 	}
 }

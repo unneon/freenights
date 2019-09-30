@@ -1,2 +1,3 @@
 [player]
-max_speed = 12.0
+acceleration = 60.0
+drag = 5.0

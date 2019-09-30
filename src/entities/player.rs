@@ -1,13 +1,27 @@
+use crate::balance::Balance;
 use amethyst::{
-	assets::Handle, core::Transform, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{SpriteRender, SpriteSheet}
+	assets::Handle, core::{math::Vector2, Transform}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{SpriteRender, SpriteSheet}
 };
 
-pub struct Player {}
+pub struct Player {
+	pub velocity: Vector2<f32>,
+}
+
+impl Player {
+	pub fn compute_acceleration(&self, axes: Vector2<f32>, balance: &Balance) -> Vector2<f32> {
+		balance.player.acceleration * axes - balance.player.drag * self.velocity
+	}
+}
 
 impl Component for Player {
 	type Storage = DenseVecStorage<Self>;
 }
 
 pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
-	world.create_entity().with(Player {}).with(Transform::default()).with(SpriteRender { sprite_sheet, sprite_number: 0 }).build();
+	world
+		.create_entity()
+		.with(Player { velocity: Vector2::new(0., 0.) })
+		.with(Transform::default())
+		.with(SpriteRender { sprite_sheet, sprite_number: 0 })
+		.build();
 }
