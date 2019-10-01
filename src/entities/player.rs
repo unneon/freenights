@@ -1,6 +1,8 @@
 use crate::balance::Balance;
 use amethyst::{
-	assets::Handle, core::{math::Vector2, Transform}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{SpriteRender, SpriteSheet}
+	assets::Handle, core::{
+		math::{Vector2, Vector3}, Transform
+	}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{SpriteRender, SpriteSheet}
 };
 
 pub struct Player {
@@ -24,10 +26,14 @@ impl Component for Player {
 }
 
 pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
+	let mut transform = Transform::default();
+	let mut scale = Vector3::zeros();
+	scale.fill(0.02);
+	transform.set_scale(scale);
 	world
 		.create_entity()
 		.with(Player { velocity: Vector2::new(0., 0.), facing: Facing::Right })
-		.with(Transform::default())
+		.with(transform)
 		.with(SpriteRender { sprite_sheet, sprite_number: 1 })
 		.build();
 }
