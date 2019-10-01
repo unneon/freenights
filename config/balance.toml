@@ -1,5 +1,7 @@
 [aliens]
 count = 8
+walking.acceleration = 20.0
+walking.drag = 5.0
 
 [player]
 walking.acceleration = 60.0

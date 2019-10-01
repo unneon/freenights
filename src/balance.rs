@@ -21,9 +21,10 @@ pub struct Player {
 #[derive(Deserialize)]
 pub struct Aliens {
 	pub count: i32,
+	pub walking: Movement,
 }
 
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct Movement {
 	pub acceleration: f32,
 	pub drag: f32,
