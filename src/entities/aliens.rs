@@ -21,6 +21,6 @@ pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 		let mut scale = Vector3::zeros();
 		scale.fill(0.02);
 		transform.set_scale(scale);
-		world.create_entity().with(transform).with(SpriteRender { sprite_sheet: sprite_sheet.clone(), sprite_number: 1 }).build();
+		world.create_entity().with(transform).with(SpriteRender { sprite_sheet: sprite_sheet.clone(), sprite_number: 3 }).build();
 	}
 }

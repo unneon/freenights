@@ -1,5 +1,5 @@
 [aliens]
-count = 10
+count = 8
 
 [player]
 walking.acceleration = 60.0
