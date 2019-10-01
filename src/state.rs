@@ -1,5 +1,5 @@
 use crate::{
-	entities::{camera, player}, graphics::load_sprite_sheet
+	entities::{aliens, camera, player}, graphics::load_sprite_sheet
 };
 use amethyst::prelude::*;
 
@@ -10,9 +10,9 @@ pub enum Game {
 impl SimpleState for Game {
 	fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
 		let sprite_sheet = load_sprite_sheet(data.world);
-		data.world.register::<player::Player>();
 		camera::initialize(data.world);
 		player::initialize(data.world, sprite_sheet.clone());
+		aliens::initialize(data.world, sprite_sheet.clone());
 	}
 }
 

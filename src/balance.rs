@@ -3,6 +3,7 @@ use std::path::Path;
 
 #[derive(Deserialize)]
 pub struct Balance {
+	pub aliens: Aliens,
 	pub player: Player,
 }
 
@@ -14,6 +15,16 @@ impl Balance {
 
 #[derive(Deserialize)]
 pub struct Player {
+	pub walking: Movement,
+}
+
+#[derive(Deserialize)]
+pub struct Aliens {
+	pub count: i32,
+}
+
+#[derive(Deserialize)]
+pub struct Movement {
 	pub acceleration: f32,
 	pub drag: f32,
 }

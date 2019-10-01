@@ -17,7 +17,7 @@ pub enum Facing {
 
 impl Player {
 	pub fn compute_acceleration(&self, axes: Vector2<f32>, balance: &Balance) -> Vector2<f32> {
-		balance.player.acceleration * axes - balance.player.drag * self.velocity
+		balance.player.walking.acceleration * axes - balance.player.walking.drag * self.velocity
 	}
 }
 

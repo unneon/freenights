@@ -1,3 +1,6 @@
+[aliens]
+count = 10
+
 [player]
-acceleration = 60.0
-drag = 5.0
+walking.acceleration = 60.0
+walking.drag = 5.0
