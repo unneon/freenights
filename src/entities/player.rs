@@ -13,7 +13,7 @@ impl Component for Player {
 
 pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 	let movement_parameters = world.read_resource::<Balance>().player.walking.clone();
-	let combat_parameters = world.read_resource::<Balance>().player.combat.clone();
+	let combat_parameters = world.read_resource::<Balance>().player.attack.clone();
 	let mut transform = Transform::default();
 	let mut scale = Vector3::zeros();
 	scale.fill(0.02);

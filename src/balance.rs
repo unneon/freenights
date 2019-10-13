@@ -15,12 +15,13 @@ impl Balance {
 
 #[derive(Deserialize)]
 pub struct Player {
-	pub combat: Combat,
+	pub attack: Attack,
 	pub walking: Movement,
 }
 
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct Aliens {
+	pub base_health: f32,
 	pub count: i32,
 	pub walking: Movement,
 }
@@ -32,6 +33,8 @@ pub struct Movement {
 }
 
 #[derive(Clone, Deserialize)]
-pub struct Combat {
-	pub attack_cooldown: f32,
+pub struct Attack {
+	pub cooldown: f32,
+	pub power: f32,
+	pub range: f32,
 }
