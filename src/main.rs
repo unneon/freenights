@@ -24,6 +24,7 @@ fn main() -> amethyst::Result<()> {
 		.with_bundle(TransformBundle::new())?
 		.with(systems::Input, "input", &["input_system"])
 		.with(systems::AI, "ai", &[])
+		.with(systems::Combat, "combat", &["input"])
 		.with(systems::Movement, "movement", &["ai", "input"])
 		.with(systems::Animation, "animation", &["movement"]);
 	let mut game =

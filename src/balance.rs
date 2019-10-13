@@ -15,6 +15,7 @@ impl Balance {
 
 #[derive(Deserialize)]
 pub struct Player {
+	pub combat: Combat,
 	pub walking: Movement,
 }
 
@@ -28,4 +29,9 @@ pub struct Aliens {
 pub struct Movement {
 	pub acceleration: f32,
 	pub drag: f32,
+}
+
+#[derive(Clone, Deserialize)]
+pub struct Combat {
+	pub attack_cooldown: f32,
 }
