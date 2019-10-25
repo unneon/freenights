@@ -13,3 +13,5 @@ pub fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
 	let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
 	loader.load("textures/spritesheet.toml", SpriteSheetTOML(texture_handle), (), &sprite_sheet_store)
 }
+
+pub struct GlobalSpriteSheet(pub Handle<SpriteSheet>);

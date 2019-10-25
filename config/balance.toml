@@ -6,7 +6,7 @@ walking.drag = 5.0
 
 [player]
 attack.cooldown = 0.8
-attack.power = 10.0
+attack.power = 34.0
 attack.range = 2.0
 walking.acceleration = 60.0
 walking.drag = 5.0

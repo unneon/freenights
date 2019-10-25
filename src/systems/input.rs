@@ -17,7 +17,7 @@ impl<'s> System<'s> for Input {
 		for (_player, walk, fight) in (&players, &mut walks, &mut fights).join() {
 			let axes = scale_axes(input.axis_value("move_horizontal").unwrap(), input.axis_value("move_vertical").unwrap());
 			walk.intent = axes;
-			fight.swing = if input.action_is_down("attack_up").unwrap() { Some(Swing::Up) } else { None };
+			fight.swing = if input.action_is_down("attack").unwrap() { Some(Swing) } else { None };
 		}
 	}
 }

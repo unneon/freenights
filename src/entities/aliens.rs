@@ -2,7 +2,7 @@ use crate::{
 	balance::Balance, entities::camera::{ARENA_HEIGHT, ARENA_WIDTH}, systems::{animation::Facing, life::Life, movement::Walking}
 };
 use amethyst::{
-	assets::Handle, core::{math::Vector3, Transform}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{SpriteRender, SpriteSheet}
+	assets::Handle, core::{math::Vector3, Transform}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{palette::rgb::Srgba, resources::Tint, SpriteRender, SpriteSheet}
 };
 use rand::{rngs::ThreadRng, Rng};
 
@@ -12,6 +12,7 @@ const ALIEN_HEIGHT: f32 = 2.06;
 pub struct Alien {
 	pub action: Action,
 	pub timeout: f32,
+	pub radius: f32,
 }
 
 pub enum Action {
@@ -47,12 +48,13 @@ pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 		transform.set_scale(scale);
 		world
 			.create_entity()
-			.with(Alien { timeout: Alien::gen_timeout_standing(&mut rng), action: Action::Standing })
+			.with(Alien { timeout: Alien::gen_timeout_standing(&mut rng), action: Action::Standing, radius: ALIEN_WIDTH.max(ALIEN_HEIGHT) / 2.0 })
 			.with(Life { health: parameters.base_health })
 			.with(Walking::new(parameters.walking.clone()))
 			.with(if rng.gen() { Facing::Left } else { Facing::Right })
 			.with(transform)
 			.with(SpriteRender { sprite_sheet: sprite_sheet.clone(), sprite_number: 3 })
+			.with(Tint(Srgba::new(1., 1., 1., 1.)))
 			.build();
 	}
 }
