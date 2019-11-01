@@ -10,6 +10,9 @@ rand = "0.7"
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.5"
 
+[patch.crates-io]
+toml = { git = "https://github.com/pustaczek/toml-rs", branch = "dotted-variant" }
+
 [profile.release]
 lto = true
 codegen-units = 1

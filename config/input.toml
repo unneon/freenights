@@ -1,6 +1,6 @@
 [axes]
-move_vertical = { Emulated = { pos = { Key = "W" }, neg = { Key = "S" } } }
-move_horizontal = { Emulated = { pos = { Key = "D" }, neg = { Key = "A" } } }
+move_vertical.Emulated = { pos.Key = "W", neg.Key = "S" }
+move_horizontal.Emulated = { pos.Key = "D" , neg.Key = "A" }
 
 [actions]
 attack = [[ { Key = "K" } ]]
