@@ -2,6 +2,7 @@ mod balance;
 mod configs;
 mod entities;
 mod graphics;
+mod item;
 mod state;
 mod systems;
 mod util;
@@ -28,8 +29,10 @@ fn main() -> amethyst::Result<()> {
 		.with(systems::CycleOfLife, "life", &["combat"])
 		.with(systems::Movement, "movement", &["ai", "input"])
 		.with(systems::Animation, "animation", &["movement"]);
-	let mut game =
-		Application::build(root_dir.join("assets"), Game::default())?.with_resource(balance::Balance::load(&root_dir)?).build(game_data)?;
+	let mut game = Application::build(root_dir.join("assets"), Game::default())?
+		.with_resource(balance::Balance::load(&root_dir)?)
+		.with_resource(configs::items(&root_dir)?)
+		.build(game_data)?;
 	game.run();
 	Ok(())
 }

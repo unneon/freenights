@@ -1,5 +1,7 @@
 use crate::{
-	balance::Balance, entities::camera::{ARENA_HEIGHT, ARENA_WIDTH}, systems::{animation::Facing, life::Life, movement::Walking}
+	balance::Balance, entities::camera::{ARENA_HEIGHT, ARENA_WIDTH}, systems::{
+		animation::Facing, life::{Life, LootKind, LootPool}, movement::Walking
+	}
 };
 use amethyst::{
 	assets::Handle, core::{math::Vector3, Transform}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{palette::rgb::Srgba, resources::Tint, SpriteRender, SpriteSheet}
@@ -49,7 +51,15 @@ pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 		world
 			.create_entity()
 			.with(Alien { timeout: Alien::gen_timeout_standing(&mut rng), action: Action::Standing, radius: ALIEN_WIDTH.max(ALIEN_HEIGHT) / 2.0 })
-			.with(Life { health: parameters.base_health, since_attack: std::f32::INFINITY })
+			.with(Life {
+				health: parameters.base_health,
+				since_attack: std::f32::INFINITY,
+				loot: LootPool(vec![LootKind { probability: 0.6, count: (1, 2), item: "bread" }, LootKind {
+					probability: 0.1,
+					count: (1, 1),
+					item: "katana",
+				}]),
+			})
 			.with(Walking::new(parameters.walking.clone()))
 			.with(if rng.gen() { Facing::Left } else { Facing::Right })
 			.with(transform)

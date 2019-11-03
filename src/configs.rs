@@ -1,7 +1,14 @@
+use crate::item::ItemDatabase;
 use amethyst::{
 	assets::{Format, Handle}, input::{Bindings, StringBindings}, renderer::{sprite::SpriteList, SpriteSheet, Texture}, window::DisplayConfig
 };
 use std::path::Path;
+
+pub fn items(root_dir: &Path) -> amethyst::Result<ItemDatabase> {
+	let raw = std::fs::read(root_dir.join("config").join("items.toml"))?;
+	let items = toml::from_slice(&raw)?;
+	Ok(ItemDatabase(items))
+}
 
 pub fn window(root_dir: &Path) -> amethyst::Result<DisplayConfig> {
 	let raw = std::fs::read(root_dir.join("config").join("display.toml"))?;

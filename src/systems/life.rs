@@ -1,14 +1,36 @@
 use amethyst::{
 	core::{SystemDesc, Time}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::resources::Tint
 };
+use rand::Rng;
 
 pub struct Life {
 	pub health: f32,
 	pub since_attack: f32,
+	pub loot: LootPool,
 }
 
 impl Component for Life {
 	type Storage = DenseVecStorage<Self>;
+}
+
+pub struct LootPool(pub Vec<LootKind>);
+pub struct LootKind {
+	pub probability: f32,
+	pub count: (i32, i32),
+	pub item: &'static str,
+}
+
+impl LootPool {
+	fn toss(&self) -> Vec<(i32, String)> {
+		let mut rng = rand::thread_rng();
+		let mut loot = Vec::new();
+		for kind in &self.0 {
+			if rng.gen_bool(kind.probability as f64) {
+				loot.push((rng.gen_range(kind.count.0, kind.count.1 + 1), kind.item.to_owned()));
+			}
+		}
+		loot
+	}
 }
 
 #[derive(SystemDesc)]
@@ -31,6 +53,9 @@ impl<'s> System<'s> for CycleOfLife {
 			life.since_attack += time.delta_seconds();
 			if life.health <= 0.0 {
 				to_delete.push(entity);
+				for (count, item) in life.loot.toss() {
+					println!("Looted {}x {}!", count, item);
+				}
 			}
 		}
 		for entity in to_delete {
