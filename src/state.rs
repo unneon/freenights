@@ -1,5 +1,5 @@
 use crate::{
-	entities::{aliens, camera, player}, graphics::load_all_sprite_sheets
+	entities::{camera, player}, graphics::load_all_sprite_sheets
 };
 use amethyst::prelude::*;
 
@@ -12,7 +12,6 @@ impl SimpleState for Game {
 		let sprite_sheet = load_all_sprite_sheets(data.world);
 		camera::initialize(data.world);
 		player::initialize(data.world, sprite_sheet.0["textures/spritesheet"].clone());
-		aliens::initialize(data.world, sprite_sheet.0["textures/spritesheet"].clone());
 		data.world.insert(sprite_sheet);
 	}
 }

@@ -1,4 +1,5 @@
 pub mod ai;
+pub mod aliens;
 pub mod animation;
 pub mod combat;
 pub mod grab;
@@ -7,6 +8,7 @@ pub mod life;
 pub mod movement;
 
 pub use ai::AI;
+pub use aliens::Aliens;
 pub use animation::Animation;
 pub use combat::Combat;
 pub use grab::GrabSystem;

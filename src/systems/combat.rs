@@ -1,4 +1,6 @@
-use crate::{balance, entities::aliens::Alien, systems::life::Alive};
+use crate::{
+	balance, systems::{aliens::Alien, life::Alive}
+};
 use amethyst::{
 	core::{SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Join, ReadExpect, ReadStorage, System, SystemData, World, WriteStorage}
 };

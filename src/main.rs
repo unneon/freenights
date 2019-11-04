@@ -24,11 +24,12 @@ fn main() -> amethyst::Result<()> {
 		)?
 		.with_bundle(TransformBundle::new())?
 		.with(systems::Input::default(), "input", &["input_system"])
-		.with(systems::AI, "ai", &[])
-		.with(systems::Combat, "combat", &["input"])
-		.with(systems::Life, "life", &["combat"])
+		.with(systems::Aliens, "aliens", &[])
+		.with(systems::AI, "ai", &["aliens"])
+		.with(systems::Combat, "combat", &["ai", "input"])
 		.with(systems::Movement, "movement", &["ai", "input"])
 		.with(systems::GrabSystem, "pickingup", &["ai", "input"])
+		.with(systems::Life, "life", &["combat"])
 		.with(systems::Animation, "animation", &["movement"]);
 	let mut game = Application::build(root_dir.join("assets"), Game::default())?
 		.with_resource(balance::Balance::load(&root_dir)?)

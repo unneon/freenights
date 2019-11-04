@@ -1,7 +1,7 @@
 use crate::{
-	entities::{
-		aliens::{Action, Alien}, camera::{ARENA_HEIGHT, ARENA_WIDTH}
-	}, systems::movement::Walking
+	entities::camera::{ARENA_HEIGHT, ARENA_WIDTH}, systems::{
+		aliens::{Alien, AlienState}, movement::Walking
+	}
 };
 use amethyst::{
 	core::{math::Vector2, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Join, Read, ReadStorage, System, SystemData, World, WriteStorage}
@@ -19,17 +19,17 @@ impl<'s> System<'s> for AI {
 		for (alien, walk, transform) in (&mut aliens, &mut walks, &transforms).join() {
 			alien.timeout -= time.delta_seconds();
 			if alien.timeout <= 0. {
-				match alien.action {
-					Action::Standing => {
+				match alien.state {
+					AlienState::Standing => {
 						let pos = Vector2::new(transform.translation().x, transform.translation().y);
 						let direction = gen_direction(&mut rng, &pos);
 						walk.intent = direction;
-						alien.action = Action::Walking;
+						alien.state = AlienState::Walking;
 						alien.timeout = Alien::gen_timeout_walking(&mut rng);
 					},
-					Action::Walking { .. } => {
+					AlienState::Walking { .. } => {
 						walk.intent = Vector2::zeros();
-						alien.action = Action::Standing;
+						alien.state = AlienState::Standing;
 						alien.timeout = Alien::gen_timeout_standing(&mut rng);
 					},
 				}
