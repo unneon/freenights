@@ -1,7 +1,4 @@
 [bread]
 name = "Bread"
 weight = 0.6
-
-[katana]
-name = "Katana"
-weight = 1.4
+sprite = { sheet = "textures/food", index = 7 }

@@ -1,5 +1,6 @@
+use crate::{graphics::GlobalSpriteSheet, item::ItemDatabase};
 use amethyst::{
-	core::{SystemDesc, Time}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::resources::Tint
+	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::{resources::Tint, SpriteRender}
 };
 use rand::Rng;
 
@@ -37,11 +38,21 @@ impl LootPool {
 pub struct CycleOfLife;
 
 impl<'s> System<'s> for CycleOfLife {
-	type SystemData = (WriteStorage<'s, Life>, WriteStorage<'s, Tint>, ReadExpect<'s, Time>, Entities<'s>);
+	type SystemData = (
+		WriteStorage<'s, Life>,
+		WriteStorage<'s, Tint>,
+		WriteStorage<'s, SpriteRender>,
+		WriteStorage<'s, Transform>,
+		ReadExpect<'s, GlobalSpriteSheet>,
+		ReadExpect<'s, ItemDatabase>,
+		ReadExpect<'s, Time>,
+		Entities<'s>,
+	);
 
-	fn run(&mut self, (mut lives, mut tints, time, entities): Self::SystemData) {
+	fn run(&mut self, (mut lives, mut tints, mut renders, mut transforms, sprite_sheets, item_database, time, entities): Self::SystemData) {
 		let mut to_delete = Vec::new();
-		for (life, tint, entity) in (&mut lives, &mut tints, &entities).join() {
+		let mut to_spawn = Vec::new();
+		for (life, tint, transform, entity) in (&mut lives, &mut tints, &transforms, &entities).join() {
 			tint.0.red = (tint.0.red - time.delta_seconds() * 8.).max(1.);
 			tint.0.green = (tint.0.green - time.delta_seconds() * 8.).max(1.);
 			tint.0.blue = (tint.0.blue - time.delta_seconds() * 8.).max(1.);
@@ -54,12 +65,30 @@ impl<'s> System<'s> for CycleOfLife {
 			if life.health <= 0.0 {
 				to_delete.push(entity);
 				for (count, item) in life.loot.toss() {
-					println!("Looted {}x {}!", count, item);
+					to_spawn.push((transform.clone(), count, item))
 				}
 			}
 		}
 		for entity in to_delete {
 			entities.delete(entity).unwrap();
+		}
+		let mut rng = rand::thread_rng();
+		for (mut transform, count, item) in to_spawn {
+			let mut scale = Vector3::zeros();
+			scale.fill(0.08);
+			transform.set_scale(scale);
+			let item_data = &item_database.0[&item];
+			for _ in 0..count {
+				let mut transform = transform.clone();
+				let translation = transform.translation_mut();
+				translation.x += rng.gen_range(-1., 1.);
+				translation.y += rng.gen_range(-1., 1.);
+				entities
+					.build_entity()
+					.with(item_data.sprite.create_render(&sprite_sheets), &mut renders)
+					.with(transform.clone(), &mut transforms)
+					.build();
+			}
 		}
 	}
 }

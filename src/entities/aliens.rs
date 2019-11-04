@@ -54,11 +54,7 @@ pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 			.with(Life {
 				health: parameters.base_health,
 				since_attack: std::f32::INFINITY,
-				loot: LootPool(vec![LootKind { probability: 0.6, count: (1, 2), item: "bread" }, LootKind {
-					probability: 0.1,
-					count: (1, 1),
-					item: "katana",
-				}]),
+				loot: LootPool(vec![LootKind { probability: 0.6, count: (1, 2), item: "bread" }]),
 			})
 			.with(Walking::new(parameters.walking.clone()))
 			.with(if rng.gen() { Facing::Left } else { Facing::Right })

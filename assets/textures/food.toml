@@ -1,0 +1,162 @@
+# https://opengameart.org/content/icons-food
+
+texture_width = 160
+texture_height = 160
+
+# [0] Banana
+[[sprites]]
+x = 0
+y = 0
+width = 32
+height = 32
+
+# [1] Cherry
+[[sprites]]
+x = 0
+y = 32
+width = 32
+height = 32
+
+# [2] Muffin
+[[sprites]]
+x = 0
+y = 64
+width = 32
+height = 32
+
+# [3] Burger
+[[sprites]]
+x = 0
+y = 96
+width = 32
+height = 32
+
+# [4] French fries
+[[sprites]]
+x = 0
+y = 128
+width = 32
+height = 32
+
+# [5] Orange
+[[sprites]]
+x = 32
+y = 0
+width = 32
+height = 32
+
+# [6] Donut
+[[sprites]]
+x = 32
+y = 32
+width = 32
+height = 32
+
+# [7] Bread
+[[sprites]]
+x = 32
+y = 64
+width = 32
+height = 32
+
+[[sprites]]
+x = 32
+y = 96
+width = 32
+height = 32
+
+[[sprites]]
+x = 32
+y = 128
+width = 32
+height = 32
+
+[[sprites]]
+x = 64
+y = 0
+width = 32
+height = 32
+
+[[sprites]]
+x = 64
+y = 32
+width = 32
+height = 32
+
+[[sprites]]
+x = 64
+y = 64
+width = 32
+height = 32
+
+[[sprites]]
+x = 64
+y = 96
+width = 32
+height = 32
+
+[[sprites]]
+x = 64
+y = 128
+width = 32
+height = 32
+
+[[sprites]]
+x = 96
+y = 0
+width = 32
+height = 32
+
+[[sprites]]
+x = 96
+y = 32
+width = 32
+height = 32
+
+[[sprites]]
+x = 96
+y = 64
+width = 32
+height = 32
+
+[[sprites]]
+x = 96
+y = 96
+width = 32
+height = 32
+
+[[sprites]]
+x = 96
+y = 128
+width = 32
+height = 32
+
+[[sprites]]
+x = 128
+y = 0
+width = 32
+height = 32
+
+[[sprites]]
+x = 128
+y = 32
+width = 32
+height = 32
+
+[[sprites]]
+x = 128
+y = 64
+width = 32
+height = 32
+
+[[sprites]]
+x = 128
+y = 96
+width = 32
+height = 32
+
+[[sprites]]
+x = 128
+y = 128
+width = 32
+height = 32
