@@ -6,6 +6,7 @@ use crate::{
 use amethyst::{
 	assets::Handle, core::{math::Vector3, Transform}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{SpriteRender, SpriteSheet}
 };
+use std::collections::HashMap;
 
 pub struct Player;
 
@@ -26,7 +27,7 @@ pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 		.with(Walking::new(movement_parameters))
 		.with(Fighting::new(combat_parameters))
 		.with(GrabDesire { target: None })
-		.with(Inventory {})
+		.with(Inventory { storage: HashMap::new() })
 		.with(Facing::Right)
 		.with(transform)
 		.with(SpriteRender { sprite_sheet, sprite_number: 1 })
