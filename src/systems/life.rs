@@ -1,6 +1,6 @@
 use crate::{graphics::GlobalSpriteSheet, item::ItemDatabase, systems::grab::GrabTarget};
 use amethyst::{
-	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::{resources::Tint, SpriteRender}
+	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::{palette::Srgba, resources::Tint, SpriteRender}
 };
 use rand::Rng;
 use serde::Deserialize;
@@ -94,6 +94,7 @@ impl<'s> System<'s> for CycleOfLife {
 				entities
 					.build_entity()
 					.with(item_data.sprite.create_render(&sprite_sheets), &mut renders)
+					.with(Tint(Srgba::new(1., 1., 1., 1.)), &mut tints)
 					.with(transform.clone(), &mut transforms)
 					.with(GrabTarget { item: item.clone() }, &mut grab_targets)
 					.build();

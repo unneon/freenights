@@ -23,7 +23,7 @@ fn main() -> amethyst::Result<()> {
 				.with_plugin(RenderFlat2D::default()),
 		)?
 		.with_bundle(TransformBundle::new())?
-		.with(systems::Input, "input", &["input_system"])
+		.with(systems::Input::default(), "input", &["input_system"])
 		.with(systems::AI, "ai", &[])
 		.with(systems::Combat, "combat", &["input"])
 		.with(systems::CycleOfLife, "life", &["combat"])
