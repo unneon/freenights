@@ -9,7 +9,7 @@ use amethyst::{
 
 #[derive(SystemDesc)]
 pub struct Input {
-	last_grab_target: Option<Entity>,
+	grab_highlight: HighlightTint,
 	grab_action: HoldableAction,
 }
 
@@ -33,22 +33,7 @@ impl<'s> System<'s> for Input {
 			walk.intent = axes;
 			fight.attack = if input.action_is_down("attack").unwrap() { Some(Attack) } else { None };
 			let grab_target = get_neareast_grab_target(transform.translation(), &transforms, &grab_targets, &entities);
-			if grab_target != self.last_grab_target {
-				if let Some(last_grab_target) = self.last_grab_target.take() {
-					if let Some(tint) = tints.get_mut(last_grab_target) {
-						tint.0.red = 1.;
-						tint.0.green = 1.;
-						tint.0.blue = 1.;
-					}
-				}
-				if let Some(grab_target) = &grab_target {
-					let tint = tints.get_mut(grab_target.clone()).unwrap();
-					tint.0.red = 2.5;
-					tint.0.green = 2.5;
-					tint.0.blue = 2.5;
-				}
-			}
-			self.last_grab_target = grab_target.clone();
+			self.grab_highlight.update(grab_target.clone(), &mut tints);
 			if self.grab_action.update(&input, &time) {
 				if let Some(entity) = grab_target {
 					desire.target = Some(entity);
@@ -60,7 +45,7 @@ impl<'s> System<'s> for Input {
 
 impl Default for Input {
 	fn default() -> Self {
-		Input { last_grab_target: None, grab_action: HoldableAction::new("grab", 0.2) }
+		Input { grab_highlight: HighlightTint::new([2.5, 2.5, 2.5]), grab_action: HoldableAction::new("grab", 0.2) }
 	}
 }
 
@@ -108,5 +93,35 @@ impl HoldableAction {
 			self.since_last = std::f32::INFINITY;
 			false
 		}
+	}
+}
+
+struct HighlightTint {
+	rgb: [f32; 3],
+	curr: Option<Entity>,
+}
+
+impl HighlightTint {
+	fn new(rgb: [f32; 3]) -> HighlightTint {
+		HighlightTint { rgb, curr: None }
+	}
+
+	fn update(&mut self, next: Option<Entity>, tints: &mut WriteStorage<Tint>) {
+		if next != self.curr {
+			if let Some(curr) = self.curr.take() {
+				if let Some(tint) = tints.get_mut(curr) {
+					tint.0.red /= self.rgb[0];
+					tint.0.green /= self.rgb[1];
+					tint.0.blue /= self.rgb[2];
+				}
+			}
+			if let Some(next) = &next {
+				let tint = tints.get_mut(next.clone()).unwrap();
+				tint.0.red *= self.rgb[0];
+				tint.0.green *= self.rgb[1];
+				tint.0.blue *= self.rgb[2];
+			}
+		}
+		self.curr = next;
 	}
 }
