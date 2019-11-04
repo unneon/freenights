@@ -5,45 +5,12 @@ use amethyst::{
 use rand::Rng;
 use serde::Deserialize;
 
-pub struct Life {
-	pub health: f32,
-	pub since_attack: f32,
-	pub loot: LootPool,
-}
-
-impl Component for Life {
-	type Storage = DenseVecStorage<Self>;
-}
-
-#[derive(Clone, Deserialize)]
-pub struct LootPool(pub Vec<LootKind>);
-
-#[derive(Clone, Deserialize)]
-pub struct LootKind {
-	pub probability: f32,
-	pub count: (i32, i32),
-	pub item: String,
-}
-
-impl LootPool {
-	fn toss(&self) -> Vec<(i32, String)> {
-		let mut rng = rand::thread_rng();
-		let mut loot = Vec::new();
-		for kind in &self.0 {
-			if rng.gen_bool(kind.probability as f64) {
-				loot.push((rng.gen_range(kind.count.0, kind.count.1 + 1), kind.item.to_owned()));
-			}
-		}
-		loot
-	}
-}
-
 #[derive(SystemDesc)]
-pub struct CycleOfLife;
+pub struct Life;
 
-impl<'s> System<'s> for CycleOfLife {
+impl<'s> System<'s> for Life {
 	type SystemData = (
-		WriteStorage<'s, Life>,
+		WriteStorage<'s, Alive>,
 		WriteStorage<'s, Tint>,
 		WriteStorage<'s, SpriteRender>,
 		WriteStorage<'s, Transform>,
@@ -101,4 +68,37 @@ impl<'s> System<'s> for CycleOfLife {
 			}
 		}
 	}
+}
+
+pub struct Alive {
+	pub health: f32,
+	pub since_attack: f32,
+	pub loot: LootPool,
+}
+
+impl Component for Alive {
+	type Storage = DenseVecStorage<Self>;
+}
+
+#[derive(Clone, Deserialize)]
+pub struct LootPool(pub Vec<LootToss>);
+
+impl LootPool {
+	fn toss(&self) -> Vec<(i32, String)> {
+		let mut rng = rand::thread_rng();
+		let mut loot = Vec::new();
+		for kind in &self.0 {
+			if rng.gen_bool(kind.probability as f64) {
+				loot.push((rng.gen_range(kind.count.0, kind.count.1 + 1), kind.item.to_owned()));
+			}
+		}
+		loot
+	}
+}
+
+#[derive(Clone, Deserialize)]
+pub struct LootToss {
+	pub probability: f32,
+	pub count: (i32, i32),
+	pub item: String,
 }

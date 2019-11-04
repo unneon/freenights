@@ -1,6 +1,6 @@
 use crate::{
 	balance::Balance, systems::{
-		animation::Facing, combat::Fighting, grab::{GrabDesire, Inventory}, movement::Walking
+		animation::WalkAnimation, combat::Fighter, grab::{GrabDesire, Inventory}, movement::Walking
 	}
 };
 use amethyst::{
@@ -25,10 +25,10 @@ pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 		.create_entity()
 		.with(Player)
 		.with(Walking::new(movement_parameters))
-		.with(Fighting::new(combat_parameters))
+		.with(Fighter::new(combat_parameters))
 		.with(GrabDesire { target: None })
 		.with(Inventory { storage: HashMap::new() })
-		.with(Facing::Right)
+		.with(WalkAnimation::Right)
 		.with(transform)
 		.with(SpriteRender { sprite_sheet, sprite_number: 1 })
 		.build();

@@ -26,7 +26,7 @@ fn main() -> amethyst::Result<()> {
 		.with(systems::Input::default(), "input", &["input_system"])
 		.with(systems::AI, "ai", &[])
 		.with(systems::Combat, "combat", &["input"])
-		.with(systems::CycleOfLife, "life", &["combat"])
+		.with(systems::Life, "life", &["combat"])
 		.with(systems::Movement, "movement", &["ai", "input"])
 		.with(systems::GrabSystem, "pickingup", &["ai", "input"])
 		.with(systems::Animation, "animation", &["movement"]);

@@ -11,5 +11,5 @@ pub use animation::Animation;
 pub use combat::Combat;
 pub use grab::GrabSystem;
 pub use input::Input;
-pub use life::CycleOfLife;
+pub use life::Life;
 pub use movement::Movement;

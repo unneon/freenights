@@ -1,6 +1,6 @@
 use crate::{
 	entities::player::Player, systems::{
-		combat::{Fighting, Swing}, grab::{GrabDesire, GrabTarget}, movement::Walking
+		combat::{Attack, Fighter}, grab::{GrabDesire, GrabTarget}, movement::Walking
 	}, util::scale_axes
 };
 use amethyst::{
@@ -17,7 +17,7 @@ impl<'s> System<'s> for Input {
 		ReadStorage<'s, Player>,
 		ReadStorage<'s, Transform>,
 		WriteStorage<'s, Walking>,
-		WriteStorage<'s, Fighting>,
+		WriteStorage<'s, Fighter>,
 		WriteStorage<'s, GrabDesire>,
 		WriteStorage<'s, Tint>,
 		ReadStorage<'s, GrabTarget>,
@@ -29,7 +29,7 @@ impl<'s> System<'s> for Input {
 		for (_player, transform, walk, fight, desire) in (&players, &transforms, &mut walks, &mut fights, &mut desires).join() {
 			let axes = scale_axes(input.axis_value("move_horizontal").unwrap(), input.axis_value("move_vertical").unwrap());
 			walk.intent = axes;
-			fight.swing = if input.action_is_down("attack").unwrap() { Some(Swing) } else { None };
+			fight.attack = if input.action_is_down("attack").unwrap() { Some(Attack) } else { None };
 			let grab_target = get_neareast_grab_target(transform.translation(), &transforms, &grab_targets, &entities);
 			if grab_target != self.last_grab_target {
 				if let Some(last_grab_target) = self.last_grab_target.take() {

@@ -6,24 +6,24 @@ use amethyst::{
 pub struct Animation;
 
 impl<'s> System<'s> for Animation {
-	type SystemData = (ReadStorage<'s, Facing>, WriteStorage<'s, SpriteRender>);
+	type SystemData = (ReadStorage<'s, WalkAnimation>, WriteStorage<'s, SpriteRender>);
 
 	fn run(&mut self, (facing, mut sprites): Self::SystemData) {
 		for (facing, sprite) in (&facing, &mut sprites).join() {
 			let bit = match facing {
-				Facing::Left => 1,
-				Facing::Right => 0,
+				WalkAnimation::Left => 1,
+				WalkAnimation::Right => 0,
 			};
 			sprite.sprite_number = (sprite.sprite_number & !1) | bit;
 		}
 	}
 }
 
-pub enum Facing {
+pub enum WalkAnimation {
 	Left,
 	Right,
 }
 
-impl Component for Facing {
+impl Component for WalkAnimation {
 	type Storage = DenseVecStorage<Self>;
 }
