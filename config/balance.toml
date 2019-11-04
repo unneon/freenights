@@ -1,6 +1,6 @@
 [aliens]
 base_health = 100.0
-count = 8
+count = 16
 loot_pool = [
 	{ probability = 0.24, count = [1, 1], item = "beer" },
 	{ probability = 0.1, count = [1, 2], item = "bread" },

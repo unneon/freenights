@@ -4,12 +4,13 @@ use crate::{
 	}, util::scale_axes
 };
 use amethyst::{
-	core::{math::Vector3, SystemDesc, Transform}, derive::SystemDesc, ecs::{Entities, Entity, Join, Read, ReadStorage, System, SystemData, World, WriteStorage}, input::{InputHandler, StringBindings}, renderer::resources::Tint
+	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Entities, Entity, Join, Read, ReadExpect, ReadStorage, System, SystemData, World, WriteStorage}, input::{InputHandler, StringBindings}, renderer::resources::Tint
 };
 
-#[derive(Default, SystemDesc)]
+#[derive(SystemDesc)]
 pub struct Input {
-	pub last_grab_target: Option<Entity>,
+	last_grab_target: Option<Entity>,
+	grab_action: HoldableAction,
 }
 
 impl<'s> System<'s> for Input {
@@ -22,10 +23,11 @@ impl<'s> System<'s> for Input {
 		WriteStorage<'s, Tint>,
 		ReadStorage<'s, GrabTarget>,
 		Read<'s, InputHandler<StringBindings>>,
+		ReadExpect<'s, Time>,
 		Entities<'s>,
 	);
 
-	fn run(&mut self, (players, transforms, mut walks, mut fights, mut desires, mut tints, grab_targets, input, entities): Self::SystemData) {
+	fn run(&mut self, (players, transforms, mut walks, mut fights, mut desires, mut tints, grab_targets, input, time, entities): Self::SystemData) {
 		for (_player, transform, walk, fight, desire) in (&players, &transforms, &mut walks, &mut fights, &mut desires).join() {
 			let axes = scale_axes(input.axis_value("move_horizontal").unwrap(), input.axis_value("move_vertical").unwrap());
 			walk.intent = axes;
@@ -47,12 +49,18 @@ impl<'s> System<'s> for Input {
 				}
 			}
 			self.last_grab_target = grab_target.clone();
-			if input.action_is_down("grab").unwrap() {
+			if self.grab_action.update(&input, &time) {
 				if let Some(entity) = grab_target {
 					desire.target = Some(entity);
 				}
 			}
 		}
+	}
+}
+
+impl Default for Input {
+	fn default() -> Self {
+		Input { last_grab_target: None, grab_action: HoldableAction::new("grab", 0.2) }
 	}
 }
 
@@ -74,4 +82,31 @@ fn get_neareast_grab_target(
 		}
 	}
 	nearest.map(|(_, entity)| entity)
+}
+
+struct HoldableAction {
+	key: &'static str,
+	weak_delay: f32,
+	since_last: f32,
+}
+
+impl HoldableAction {
+	fn new(key: &'static str, weak_delay: f32) -> HoldableAction {
+		HoldableAction { key, weak_delay, since_last: std::f32::INFINITY }
+	}
+
+	fn update(&mut self, input: &InputHandler<StringBindings>, time: &Time) -> bool {
+		self.since_last += time.delta_seconds();
+		if input.action_is_down(self.key).unwrap() {
+			if self.since_last >= self.weak_delay {
+				self.since_last = 0.;
+				true
+			} else {
+				false
+			}
+		} else {
+			self.since_last = std::f32::INFINITY;
+			false
+		}
+	}
 }
