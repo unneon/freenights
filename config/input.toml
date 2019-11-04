@@ -4,3 +4,4 @@ move_horizontal.Emulated = { pos.Key = "D", neg.Key = "A" }
 
 [actions]
 attack = [[ { Key = "K" } ]]
+grab = [[ { Key = "J" } ]]

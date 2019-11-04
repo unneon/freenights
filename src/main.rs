@@ -28,6 +28,7 @@ fn main() -> amethyst::Result<()> {
 		.with(systems::Combat, "combat", &["input"])
 		.with(systems::CycleOfLife, "life", &["combat"])
 		.with(systems::Movement, "movement", &["ai", "input"])
+		.with(systems::GrabSystem, "pickingup", &["ai", "input"])
 		.with(systems::Animation, "animation", &["movement"]);
 	let mut game = Application::build(root_dir.join("assets"), Game::default())?
 		.with_resource(balance::Balance::load(&root_dir)?)

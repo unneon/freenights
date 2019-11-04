@@ -1,5 +1,7 @@
 use crate::{
-	balance::Balance, systems::{animation::Facing, combat::Fighting, movement::Walking}
+	balance::Balance, systems::{
+		animation::Facing, combat::Fighting, grab::{GrabDesire, Inventory}, movement::Walking
+	}
 };
 use amethyst::{
 	assets::Handle, core::{math::Vector3, Transform}, ecs::{Component, DenseVecStorage}, prelude::*, renderer::{SpriteRender, SpriteSheet}
@@ -23,6 +25,8 @@ pub fn initialize(world: &mut World, sprite_sheet: Handle<SpriteSheet>) {
 		.with(Player)
 		.with(Walking::new(movement_parameters))
 		.with(Fighting::new(combat_parameters))
+		.with(GrabDesire { target: None })
+		.with(Inventory {})
 		.with(Facing::Right)
 		.with(transform)
 		.with(SpriteRender { sprite_sheet, sprite_number: 1 })

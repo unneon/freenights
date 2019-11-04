@@ -1,4 +1,4 @@
-use crate::{graphics::GlobalSpriteSheet, item::ItemDatabase};
+use crate::{graphics::GlobalSpriteSheet, item::ItemDatabase, systems::grab::GrabTarget};
 use amethyst::{
 	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::{resources::Tint, SpriteRender}
 };
@@ -47,13 +47,17 @@ impl<'s> System<'s> for CycleOfLife {
 		WriteStorage<'s, Tint>,
 		WriteStorage<'s, SpriteRender>,
 		WriteStorage<'s, Transform>,
+		WriteStorage<'s, GrabTarget>,
 		ReadExpect<'s, GlobalSpriteSheet>,
 		ReadExpect<'s, ItemDatabase>,
 		ReadExpect<'s, Time>,
 		Entities<'s>,
 	);
 
-	fn run(&mut self, (mut lives, mut tints, mut renders, mut transforms, sprite_sheets, item_database, time, entities): Self::SystemData) {
+	fn run(
+		&mut self,
+		(mut lives, mut tints, mut renders, mut transforms, mut grab_targets, sprite_sheets, item_database, time, entities): Self::SystemData,
+	) {
 		let mut to_delete = Vec::new();
 		let mut to_spawn = Vec::new();
 		for (life, tint, transform, entity) in (&mut lives, &mut tints, &transforms, &entities).join() {
@@ -91,6 +95,7 @@ impl<'s> System<'s> for CycleOfLife {
 					.build_entity()
 					.with(item_data.sprite.create_render(&sprite_sheets), &mut renders)
 					.with(transform.clone(), &mut transforms)
+					.with(GrabTarget { item: item.clone() }, &mut grab_targets)
 					.build();
 			}
 		}
