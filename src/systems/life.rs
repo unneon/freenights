@@ -3,6 +3,7 @@ use amethyst::{
 	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::{resources::Tint, SpriteRender}
 };
 use rand::Rng;
+use serde::Deserialize;
 
 pub struct Life {
 	pub health: f32,
@@ -14,11 +15,14 @@ impl Component for Life {
 	type Storage = DenseVecStorage<Self>;
 }
 
+#[derive(Clone, Deserialize)]
 pub struct LootPool(pub Vec<LootKind>);
+
+#[derive(Clone, Deserialize)]
 pub struct LootKind {
 	pub probability: f32,
 	pub count: (i32, i32),
-	pub item: &'static str,
+	pub item: String,
 }
 
 impl LootPool {

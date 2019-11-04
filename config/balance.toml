@@ -1,6 +1,13 @@
 [aliens]
 base_health = 100.0
 count = 8
+loot_pool = [
+	{ probability = 0.5, count = [1, 1], item = "beer" },
+	{ probability = 0.1, count = [1, 2], item = "bread" },
+	{ probability = 0.1, count = [1, 1], item = "chocolate" },
+	{ probability = 0.04, count = [1, 1], item = "fish" },
+	{ probability = 0.2, count = [1, 4], item = "pizza" },
+]
 walking.acceleration = 20.0
 walking.drag = 5.0
 

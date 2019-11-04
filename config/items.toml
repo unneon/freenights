@@ -1,4 +1,24 @@
+[beer]
+name = "Beer"
+weight = 0.25
+sprite = { sheet = "textures/food", index = 22 }
+
 [bread]
 name = "Bread"
 weight = 0.6
 sprite = { sheet = "textures/food", index = 7 }
+
+[chocolate]
+name = "Chocolate"
+weight = 0.1
+sprite = { sheet = "textures/food", index = 24 }
+
+[fish]
+name = "Fish"
+weight = 5
+sprite = { sheet = "textures/food", index = 9 }
+
+[pizza]
+name = "Pizza"
+weight = 0.1
+sprite = { sheet = "textures/food", index = 13 }

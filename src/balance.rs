@@ -1,3 +1,4 @@
+use crate::systems::life::LootPool;
 use serde::Deserialize;
 use std::path::Path;
 
@@ -23,6 +24,7 @@ pub struct Player {
 pub struct Aliens {
 	pub base_health: f32,
 	pub count: i32,
+	pub loot_pool: LootPool,
 	pub walking: Movement,
 }
 
