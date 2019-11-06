@@ -31,8 +31,14 @@ impl<'s> System<'s> for Aliens {
 		let to_spawn = balance.aliens.count - live_count;
 		for _ in 0..to_spawn {
 			let mut rng = rand::thread_rng();
-			let x = rng.gen_range(-ARENA_WIDTH / 2. + Alien::WIDTH / 2., ARENA_WIDTH / 2. - Alien::WIDTH / 2.);
-			let y = rng.gen_range(-ARENA_HEIGHT / 2. + Alien::HEIGHT / 2., ARENA_HEIGHT / 2. - Alien::HEIGHT / 2.);
+			let [x, y] = gen_near_rectangle(
+				&mut rng,
+				-ARENA_WIDTH / 2. - Alien::WIDTH / 2.,
+				-ARENA_HEIGHT / 2. - Alien::HEIGHT / 2.,
+				ARENA_WIDTH / 2. + Alien::WIDTH / 2.,
+				ARENA_HEIGHT / 2. + Alien::HEIGHT / 2.,
+				2.0,
+			);
 			let mut transform = Transform::default();
 			transform.set_translation_x(x);
 			transform.set_translation_y(y);
@@ -71,6 +77,17 @@ fn count_aliens(aliens: &mut WriteStorage<Alien>) -> i32 {
 	count
 }
 
+fn gen_near_rectangle(rng: &mut ThreadRng, x1: f32, y1: f32, x2: f32, y2: f32, offset: f32) -> [f32; 2] {
+	let sign = if rng.gen() { -1. } else { 1. };
+	if rng.gen() {
+		let local_y = (y2 - y1) / 2. + rng.gen_range(0., offset);
+		[rng.gen_range(x1, x2), (y1 + y2) / 2. + sign * local_y]
+	} else {
+		let local_x = (x2 - x1) / 2. + rng.gen_range(0., offset);
+		[(x1 + x2) / 2. + sign * local_x, rng.gen_range(y1, y2)]
+	}
+}
+
 pub struct Alien {
 	pub state: AlienState,
 	pub timeout: f32,
@@ -94,7 +111,8 @@ impl Component for Alien {
 	type Storage = DenseVecStorage<Self>;
 }
 
+#[derive(Debug)]
 pub enum AlienState {
 	Standing,
-	Walking,
+	Walking { to_middle: bool },
 }
