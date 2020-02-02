@@ -14,7 +14,12 @@ use rand::{rngs::ThreadRng, Rng};
 pub struct AI;
 
 impl<'s> System<'s> for AI {
-	type SystemData = (WriteStorage<'s, Alien>, WriteStorage<'s, Walking>, ReadStorage<'s, Transform>, Read<'s, Time>);
+	type SystemData = (
+		WriteStorage<'s, Alien>,
+		WriteStorage<'s, Walking>,
+		ReadStorage<'s, Transform>,
+		Read<'s, Time>,
+	);
 
 	fn run(&mut self, (mut aliens, mut walks, transforms, time): Self::SystemData) {
 		let mut rng = rand::thread_rng();
@@ -24,7 +29,8 @@ impl<'s> System<'s> for AI {
 			if alien.timeout <= 0. {
 				match alien.state {
 					AlienState::Standing => {
-						let pos = Vector2::new(transform.translation().x, transform.translation().y);
+						let pos =
+							Vector2::new(transform.translation().x, transform.translation().y);
 						let (direction, to_middle) = gen_direction(&mut rng, &pos);
 						walk.intent = direction;
 						alien.state = AlienState::Walking { to_middle };
@@ -46,7 +52,10 @@ impl<'s> System<'s> for AI {
 fn gen_direction(rng: &mut ThreadRng, pos: &Vector2<f32>) -> (Vector2<f32>, bool) {
 	let to_middle = !is_inside_arena(&pos);
 	let path = if to_middle {
-		let target = Vector2::new(rng.gen_range(-ARENA_WIDTH / 4., ARENA_WIDTH / 4.), rng.gen_range(-ARENA_HEIGHT / 4., ARENA_HEIGHT / 4.));
+		let target = Vector2::new(
+			rng.gen_range(-ARENA_WIDTH / 4., ARENA_WIDTH / 4.),
+			rng.gen_range(-ARENA_HEIGHT / 4., ARENA_HEIGHT / 4.),
+		);
 		target - pos
 	} else {
 		Vector2::new(rng.gen_range(-1., 1.), rng.gen_range(-1., 1.))

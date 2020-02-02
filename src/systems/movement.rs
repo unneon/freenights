@@ -7,11 +7,17 @@ use amethyst::{
 pub struct Movement;
 
 impl<'s> System<'s> for Movement {
-	type SystemData = (WriteStorage<'s, Transform>, WriteStorage<'s, Walking>, WriteStorage<'s, WalkAnimation>, Read<'s, Time>);
+	type SystemData = (
+		WriteStorage<'s, Transform>,
+		WriteStorage<'s, Walking>,
+		WriteStorage<'s, WalkAnimation>,
+		Read<'s, Time>,
+	);
 
 	fn run(&mut self, (mut transforms, mut walks, mut faces, time): Self::SystemData) {
 		for (transform, walk, face) in (&mut transforms, &mut walks, &mut faces).join() {
-			let acceleration = walk.parameters.acceleration * walk.intent - walk.parameters.drag * walk.velocity;
+			let acceleration =
+				walk.parameters.acceleration * walk.intent - walk.parameters.drag * walk.velocity;
 			walk.velocity += acceleration * time.delta_seconds();
 			let displacement = walk.velocity * time.delta_seconds();
 			transform.prepend_translation_x(displacement[0]);

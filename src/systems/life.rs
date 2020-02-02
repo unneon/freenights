@@ -1,6 +1,8 @@
 use crate::{graphics::GlobalSpriteSheet, item::ItemDatabase, systems::grab::GrabTarget};
 use amethyst::{
-	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage}, renderer::{palette::Srgba, resources::Tint, SpriteRender}
+	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{
+		Component, DenseVecStorage, Entities, Join, ReadExpect, System, SystemData, World, WriteStorage
+	}, renderer::{palette::Srgba, resources::Tint, SpriteRender}
 };
 use rand::Rng;
 use serde::Deserialize;
@@ -23,11 +25,24 @@ impl<'s> System<'s> for Life {
 
 	fn run(
 		&mut self,
-		(mut lives, mut tints, mut renders, mut transforms, mut grab_targets, sprite_sheets, item_database, time, entities): Self::SystemData,
-	) {
+		(
+			mut lives,
+			mut tints,
+			mut renders,
+			mut transforms,
+			mut grab_targets,
+			sprite_sheets,
+			item_database,
+			time,
+			entities,
+		): Self::SystemData,
+	)
+	{
 		let mut to_delete = Vec::new();
 		let mut to_spawn = Vec::new();
-		for (life, tint, transform, entity) in (&mut lives, &mut tints, &transforms, &entities).join() {
+		for (life, tint, transform, entity) in
+			(&mut lives, &mut tints, &transforms, &entities).join()
+		{
 			tint.0.red = (tint.0.red - time.delta_seconds() * 8.).max(1.);
 			tint.0.green = (tint.0.green - time.delta_seconds() * 8.).max(1.);
 			tint.0.blue = (tint.0.blue - time.delta_seconds() * 8.).max(1.);

@@ -1,5 +1,7 @@
 use amethyst::{
-	core::SystemDesc, derive::SystemDesc, ecs::{Component, DenseVecStorage, Entities, Entity, Join, ReadStorage, System, SystemData, World, WriteStorage}
+	core::SystemDesc, derive::SystemDesc, ecs::{
+		Component, DenseVecStorage, Entities, Entity, Join, ReadStorage, System, SystemData, World, WriteStorage
+	}
 };
 use std::collections::HashMap;
 
@@ -7,7 +9,12 @@ use std::collections::HashMap;
 pub struct GrabSystem;
 
 impl<'s> System<'s> for GrabSystem {
-	type SystemData = (WriteStorage<'s, GrabDesire>, ReadStorage<'s, GrabTarget>, WriteStorage<'s, Inventory>, Entities<'s>);
+	type SystemData = (
+		WriteStorage<'s, GrabDesire>,
+		ReadStorage<'s, GrabTarget>,
+		WriteStorage<'s, Inventory>,
+		Entities<'s>,
+	);
 
 	fn run(&mut self, (mut desires, grab_targets, mut inventories, entities): Self::SystemData) {
 		for (desire, inventory) in (&mut desires, &mut inventories).join() {

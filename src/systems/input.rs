@@ -4,7 +4,9 @@ use crate::{
 	}, util::scale_axes
 };
 use amethyst::{
-	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{Entities, Entity, Join, Read, ReadExpect, ReadStorage, System, SystemData, World, WriteStorage}, input::{InputHandler, StringBindings}, renderer::resources::Tint
+	core::{math::Vector3, SystemDesc, Time, Transform}, derive::SystemDesc, ecs::{
+		Entities, Entity, Join, Read, ReadExpect, ReadStorage, System, SystemData, World, WriteStorage
+	}, input::{InputHandler, StringBindings}, renderer::resources::Tint
 };
 
 #[derive(SystemDesc)]
@@ -27,12 +29,38 @@ impl<'s> System<'s> for Input {
 		Entities<'s>,
 	);
 
-	fn run(&mut self, (players, transforms, mut walks, mut fights, mut desires, mut tints, grab_targets, input, time, entities): Self::SystemData) {
-		for (_player, transform, walk, fight, desire) in (&players, &transforms, &mut walks, &mut fights, &mut desires).join() {
-			let axes = scale_axes(input.axis_value("move_horizontal").unwrap(), input.axis_value("move_vertical").unwrap());
+	fn run(
+		&mut self,
+		(
+			players,
+			transforms,
+			mut walks,
+			mut fights,
+			mut desires,
+			mut tints,
+			grab_targets,
+			input,
+			time,
+			entities,
+		): Self::SystemData,
+	)
+	{
+		for (_player, transform, walk, fight, desire) in
+			(&players, &transforms, &mut walks, &mut fights, &mut desires).join()
+		{
+			let axes = scale_axes(
+				input.axis_value("move_horizontal").unwrap(),
+				input.axis_value("move_vertical").unwrap(),
+			);
 			walk.intent = axes;
-			fight.attack = if input.action_is_down("attack").unwrap() { Some(Attack) } else { None };
-			let grab_target = get_neareast_grab_target(transform.translation(), &transforms, &grab_targets, &entities);
+			fight.attack =
+				if input.action_is_down("attack").unwrap() { Some(Attack) } else { None };
+			let grab_target = get_neareast_grab_target(
+				transform.translation(),
+				&transforms,
+				&grab_targets,
+				&entities,
+			);
 			self.grab_highlight.update(grab_target.clone(), &mut tints);
 			if self.grab_action.update(&input, &time) {
 				if let Some(entity) = grab_target {
@@ -45,7 +73,10 @@ impl<'s> System<'s> for Input {
 
 impl Default for Input {
 	fn default() -> Self {
-		Input { grab_highlight: HighlightTint::new([2.5, 2.5, 2.5]), grab_action: HoldableAction::new("grab", 0.2) }
+		Input {
+			grab_highlight: HighlightTint::new([2.5, 2.5, 2.5]),
+			grab_action: HoldableAction::new("grab", 0.2),
+		}
 	}
 }
 
@@ -54,7 +85,8 @@ fn get_neareast_grab_target(
 	transforms: &ReadStorage<Transform>,
 	grab_targets: &ReadStorage<GrabTarget>,
 	entities: &Entities,
-) -> Option<Entity> {
+) -> Option<Entity>
+{
 	let mut nearest = None;
 	for (grab_transform, _grab_target, entity) in (transforms, grab_targets, entities).join() {
 		let grab_pos = grab_transform.translation();

@@ -21,6 +21,9 @@ pub struct ItemDatabase(pub HashMap<String, ItemData>);
 
 impl ItemSprite {
 	pub fn create_render(&self, sprite_sheets: &GlobalSpriteSheet) -> SpriteRender {
-		SpriteRender { sprite_sheet: sprite_sheets.0[&self.sheet].clone(), sprite_number: self.index }
+		SpriteRender {
+			sprite_sheet: sprite_sheets.0[&self.sheet].clone(),
+			sprite_number: self.index,
+		}
 	}
 }
